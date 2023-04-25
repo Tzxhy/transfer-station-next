@@ -1,0 +1,1 @@
+export const TOKEN_CACHE_NAME = '__TOKEN__'
