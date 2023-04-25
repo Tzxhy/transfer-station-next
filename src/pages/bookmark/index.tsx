@@ -1,3 +1,4 @@
+
 import debounce from 'lodash.debounce'
 import {
 	CssBaseline,
@@ -9,6 +10,7 @@ import {
 	Autocomplete,
 	Box,
 	Input,
+	NoSsr,
 } from '@mui/material';
 import { bookmarksToJSON, Bookmark as JSONBookMark } from 'bookmarks-to-json';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -28,12 +30,12 @@ import {
 import CustomThemeProvider from '../../components/Theme';
 import { useMenu } from '../../hooks/useMenu';
 import useDialog from '../../hooks/useDialog';
-import EditBookMarkDialogBody from './edit';
+import EditBookMarkDialogBody from '../../components/Bookmark/edit';
 import useStateRef from '../../hooks/useStateRef';
 import useTip from '../../hooks/useTip';
 import Empty from '../../components/Empty';
 import AddIcon from '@mui/icons-material/Add';
-import ListInner from './listInner';
+import ListInner from '../../components/Bookmark/listInner';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import deleteWithRevoke from '../../utils/deleteWithRevoke';
@@ -317,7 +319,7 @@ export default function ClipBoardList() {
 				title='书签'
 				leftIcon={<BookmarkIcon />}
 				settingList={[
-					<Button variant="outlined" component="label" fullWidth>
+					<Button key={1} variant="outlined" component="label" fullWidth>
 						从书签文件导入
 						<input hidden accept="text/html" onChange={async e => {
 							if (!e.target.files?.length) {
@@ -358,7 +360,7 @@ export default function ClipBoardList() {
 							getBookMarkData();
 						}} type="file" />
 					</Button>,
-					<Button variant="outlined" component="label" fullWidth onClick={() => {
+					<Button key={2} variant="outlined" component="label" fullWidth onClick={() => {
 						const bookmarks: GenerateBookmark = {
 							name: '书签栏',
 							toolbar: true,
@@ -435,7 +437,7 @@ export default function ClipBoardList() {
 					}}>
 						书签导出
 					</Button>,
-					<Button variant="outlined" fullWidth color='warning' onClick={() => {
+					<Button key={3} variant="outlined" fullWidth color='warning' onClick={() => {
 						const closeDialog = openDialog({
 							title: '确认删除所有',
 							desc: '删除所有书签数据，将无法恢复。',
@@ -527,17 +529,19 @@ export default function ClipBoardList() {
 			{
 				menu
 			}
-			<BackTop
-				target={() => document.querySelector('.list-hidden')!}
-				threshold={1000}
-				whenHiddenNode={
-					<SpeedDial
-						ariaLabel="SpeedDial basic example"
-						icon={<AddIcon />}
-						onClick={addNew}
-					></SpeedDial>
-				}
-			/>
+			<NoSsr>
+				<BackTop
+					target={() => document.querySelector('.list-hidden')!}
+					threshold={1000}
+					whenHiddenNode={
+						<SpeedDial
+							ariaLabel="SpeedDial basic example"
+							icon={<AddIcon />}
+							onClick={addNew}
+						></SpeedDial>
+					}
+				/>
+			</NoSsr>
 
 		</CustomThemeProvider>
 	);

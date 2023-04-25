@@ -1,3 +1,12 @@
+import {
+	NextRequest,
+} from 'next/server';
+
+export type UserPayload = {
+    username: string;
+    userid: string;
+}
+
 declare module 'bookmarks-to-json' {
 	export type Bookmark = {
 		/** 添加日期 */
@@ -18,4 +27,8 @@ declare module 'bookmarks-to-json' {
 	export const bookmarksToJSON: (html: string, options: {
 		stringify: boolean;
 	}) => Bookmark[];
+}
+
+export class NextRequestWithContext extends NextRequest {
+	context: UserPayload;
 }

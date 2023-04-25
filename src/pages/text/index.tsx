@@ -1,4 +1,4 @@
-
+/* eslint-disable */
 import {
 	Typography,
 	Link,
@@ -13,6 +13,7 @@ import {
 	SpeedDialIcon,
 	Backdrop,
 	Autocomplete,
+	NoSsr,
 } from '@mui/material';
 
 import { useCallback, useEffect, useState } from 'react';
@@ -28,12 +29,12 @@ import {
 
 import CustomThemeProvider from '../../components/Theme';
 import useDialog from '../../hooks/useDialog';
-import Edit from './add';
+import Edit from '../../components/Text/add';
 import useTip from '../../hooks/useTip';
 import useStateRef from '../../hooks/useStateRef';
 import debounce from 'lodash.debounce';
 import Empty from '../../components/Empty';
-import ListInner from './listInner';
+import ListInner from '../../components/Text/listInner';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import { isPc } from '../../utils/env';
@@ -82,8 +83,9 @@ export default function ClipBoardList() {
 
 	useEffect(() => {
 		debounceUpdateList();
-	}, [
-		debounceUpdateList,
+	}, 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[
 		list,
 		search,
 	]);
@@ -99,7 +101,9 @@ export default function ClipBoardList() {
 				autoHideDuration: 1000,
 			})
 		}
-	}, [])
+	}, 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[])
 
 	const deleteItem = useCallback(async (i: ClipBoard) => {
 		const succ = await deleteClipBoardList([i.id]);
@@ -117,7 +121,12 @@ export default function ClipBoardList() {
 			});
 			getClipBoardData();
 		}
-	}, []);
+	},
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[]);
+
+
+
 	const addNew = useCallback(async (useClipboardDataOnMount: boolean) => {
 		let value = [] as ClipBoard[];
 		const closeDialog = openDialog({
@@ -303,6 +312,9 @@ export default function ClipBoardList() {
 							? <Button fullWidth color='error' variant='outlined' onClick={deleteAll}>删除所有</Button> : null
 					}
 				</Container>
+				<Container sx={{
+					height: 32,
+				}} />
 			</main>
 
 			{
@@ -313,9 +325,11 @@ export default function ClipBoardList() {
 				tip
 			}
 			{
-				!isPcEnv ? <Backdrop open={speedDialOpen} sx={{
-					zIndex: 1,
-				}}/> : null
+				!isPcEnv ? <NoSsr>
+					<Backdrop open={speedDialOpen} sx={{
+						zIndex: 1,
+					}}/>
+				</NoSsr>: null
 			}
 			<BackTop anchor='#toolbar-hidden' threshold={1000} whenHiddenNode={
 				<SpeedDial

@@ -9,7 +9,7 @@ const domain = ''
 
 const instance = axios.create();
 instance.interceptors.request.use(v => {
-	v.url = domain + '/api/v1' + v.url;
+	v.url = domain + '/api' + v.url;
 	const token = getToken();
 	if (token) {
 		v.headers!.Authorization = token;

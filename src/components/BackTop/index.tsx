@@ -1,4 +1,4 @@
-import { Box, IconButton, Slide, useScrollTrigger } from '@mui/material';
+import { Box, IconButton, Slide, useScrollTrigger, NoSsr} from '@mui/material';
 import { memo, useCallback } from 'react';
 import ArrowUpwardRoundedIcon from '@mui/icons-material/ArrowUpwardRounded';
 
@@ -23,6 +23,7 @@ export default memo(function BackTop(props: {
 		} else if (props.target) {
 			props.target()!.scrollTop = 0;			
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		props.anchor,
 		props.target,
@@ -30,25 +31,19 @@ export default memo(function BackTop(props: {
 
 	return (
 		<div style={{position: 'absolute', zIndex: 1,}}>
-			<Slide key={1} in={isTriggered} direction='left'>
-				<IconButton color='primary' onClick={click} sx={{
-					position: 'fixed',
-					border: 1,
-					borderColor: 'divider',
-					bottom: 16,
-					right: 16,
-					bgcolor: 'background.default',
-				}}>
-					<ArrowUpwardRoundedIcon fontSize='large' />
-				</IconButton>
-			</Slide>
-			{
-				props.whenHiddenNode ? <Slide key={2} in={!isTriggered} direction='left'>
-					<Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>{
-						props.whenHiddenNode
-					}</Box>
-				</Slide> : null
-			}
+			<NoSsr>
+				<Slide key={1} in={isTriggered} direction='left'>
+					<div>123</div>
+				</Slide>
+				{
+					props.whenHiddenNode ? <Slide key={2} in={!isTriggered} direction='left'>
+						<Box sx={{ position: 'fixed', bottom: 16, right: 16 }}>{
+							props.whenHiddenNode
+						}</Box>
+					</Slide> : null
+				}
+			</NoSsr>
+			
 		</div>
 	)
 })

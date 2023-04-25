@@ -55,7 +55,9 @@ export default function useTip(conf?: OpenTipConf) {
 				snackbarConf.content
 			}
 		</Alert>
-	</Snackbar>, [
+	</Snackbar>,
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[
 		snackbarOpen,
 		snackbarConf,
 	]);

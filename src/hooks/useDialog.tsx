@@ -35,6 +35,7 @@ export default function useDialog() {
 				setLastUpdateDialog(i => i + 1)
 			});
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [open])
 	
 
@@ -58,7 +59,9 @@ export default function useDialog() {
 			<Button onClick={handleClose}>取消</Button>
 			<Button onClick={handleOk}>确定</Button>
 		</DialogActions>
-	</Dialog>), [
+	</Dialog>), 
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[
 		staticConf,
 		open,
 	]);

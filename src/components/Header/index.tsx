@@ -39,6 +39,13 @@ export default memo(function Header(props: {
 	const [isOfflineByBrowser, setIsOfflineByBrowser] = useState(defaultIsOffline)
 	const [useOfflineMode, setUseOfflineMode] = useState(useForceOfflineMode || isOfflineByBrowser)
 
+	const [title, setTitle] = useState(`传送站 - ${props.title}`);
+	useEffect(() => {
+		setTitle(`${useOfflineMode ? '[离线]' : ''}传送站 - ${props.title}`)
+	},
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[useOfflineMode])
+
 	const isLogin = !!getToken();
 
 	useEffect(() => {
@@ -82,7 +89,7 @@ export default memo(function Header(props: {
 
 
 	return <AppBar position="fixed" sx={{
-		zIndex: 1,
+		zIndex: 3,
 	}}>
 		<Toolbar sx={{
 			height: '64px !important',
@@ -105,7 +112,7 @@ export default memo(function Header(props: {
 			<Typography variant="h6" color="inherit" noWrap sx={{
 				flexGrow: 1,
 			}}>
-				{useOfflineMode ? '[离线] ' : ''}传送站 - {props.title}
+				{title}
 			</Typography>
 			{
 				showHomeIcon ? <IconButton

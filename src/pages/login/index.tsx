@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react'
 
 import Image from 'next/image';
@@ -56,7 +57,7 @@ export default function Login() {
 			const registerData = await register(username, hash().update(password).digest('hex'));
 			if (registerData.data?.token) {
 				setToken(registerData.data.token);
-				location.href = '/html/main/';
+				location.href = '/';
 			} else {
 				setErrorTips(registerData.message);
 			}
@@ -65,7 +66,7 @@ export default function Login() {
 			if (loginData) {
 				if (loginData.data?.token) {
 					setToken(loginData.data.token);
-					location.href = '/html/main/';
+					location.href = '/';
 				} else {
 					setErrorTips(loginData.message);
 				}
@@ -97,8 +98,11 @@ export default function Login() {
 			alignItems: 'center',
 			backgroundColor: 'background.paper',
 		}}>
-			<Container sx={{
-				boxShadow: 4,
+			<Container maxWidth='md' sx={{
+				boxShadow: {
+					xs: 0,
+					md: 4,
+				},
 				borderRadius: 2,
 				height: 500,
 				userSelect: 'none',
@@ -106,7 +110,6 @@ export default function Login() {
 				<Grid container sx={{
 					height: '100%',
 					borderColor: 'divider',
-					border: 1,
 				}}>
 					<Grid item
 						sx={{
@@ -125,7 +128,7 @@ export default function Login() {
 							alignItems: 'center',
 						}}
 						>
-							<Image src='/img/login.svg' style={{
+							<Image alt='' src='/img/login.svg' width={300} height={300} style={{
 								// borderRight: '1px solid #dcdcdc',
 								width: '100%',
 							}} />
@@ -148,7 +151,7 @@ export default function Login() {
 								alignItems: 'center',
 								fontSize: 28,
 							}}>
-								<Image src='/icon.png' width={24} style={{
+								<Image alt='' src='/icon.png' width={24} height={24} style={{
 									marginRight: 16,
 								}} />
 								<Typography variant='h5' sx={{

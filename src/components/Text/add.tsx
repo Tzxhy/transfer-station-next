@@ -23,6 +23,7 @@ export default function Edit(props: {
 				setNewString([text]);
 			})();
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	useEffect(() => {
@@ -33,6 +34,7 @@ export default function Edit(props: {
 			created_at: '',
 			id: '',
 		})));
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [newString, note]);
 
 	return <Box>

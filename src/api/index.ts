@@ -14,7 +14,7 @@ export function register(username: string, password: string) {
 		username: string;
 		id: string;
 		token: string;
-	}>>('/auth/register', {
+	}>>('/register', {
 		username,
 		password,
 	});
@@ -25,7 +25,7 @@ export function login(username: string, password: string) {
 	return instance.post<any, Resp<{
 		username: string;
 		token: string;
-	}>>('/auth/login', {
+	}>>('/login', {
 		username,
 		password,
 	});
@@ -53,7 +53,7 @@ export async function getClipBoardList() {
 	await updateLocalClipBoardList();
 	return instance.get<any, Resp<{
 		list:  ListDataItemWithCache<ClipBoard>[];
-	}>>('/clipboard/list').then(d => {
+	}>>('/text').then(d => {
 		if (d.code === 0) {
 			cacheData(CLIP_BOARD_LIST_KEY, d.data.list)
 		}
@@ -150,7 +150,7 @@ export function createClipBoard(list: Omit<ClipBoard, 'created_at' | 'id'>[], up
 		successCount: number;
 		ids: string[];
 		created_at: string;
-	}>>('/clipboard/create', {
+	}>>('/text', {
 		list,
 	}).then(d => {
 		if (updateLocal) {
@@ -262,7 +262,7 @@ export async function getBookMarkList() {
 		last_anchor_match: boolean;
 		icons: Record<number, string>;
 		last_anchor: number;
-	}>>('/bookmark/list', {
+	}>>('/bookmark', {
 		params: {
 			last_anchor: getCacheData(BOOK_MARK_LIST_ANCHOR_KEY) || '',
 		},
@@ -305,11 +305,13 @@ export async function deleteBookMark(list: string[], updateLocal = true) {
 			},
 		};
 	}
-	return instance.post<any, Resp<{
+	return instance.delete<any, Resp<{
 		successCount: number;
 		aid: string;
-	}>>('/bookmark/delete', {
-		ids: list,
+	}>>('/bookmark', {
+		data: {
+			ids: list,
+		},
 	}).then(d => {
 		if (updateLocal) {
 			const listData = getCacheData(BOOK_MARK_LIST_KEY) as ListDataItemWithCache<BookMark>[];
@@ -342,10 +344,10 @@ export function modifyBookMark(bookmark: ListDataItemWithCache<BookMark>, update
 			},
 		};
 	}
-	return instance.post<any, Resp<{
+	return instance.put<any, Resp<{
 		successCount: number;
 		aid: string;
-	}>>('/bookmark/modify', {
+	}>>('/bookmark', {
 		...bookmark,
 	}).then(d => {
 		if (updateLocal) {
@@ -426,7 +428,7 @@ export function addBookMark(bookmark: ListDataItemWithCache<
 		created_at: string;
 		icon_id: number;
 		aid: string;
-	}>>('/bookmark/create', {
+	}>>('/bookmark', {
 		...bookmark,
 	}).then(d => {
 		if (updateLocal) {
