@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server";
 
 export const getName = () => 'jjj';
 
-export const getResponse = <T>(code: number, message: string, data: T) => new Response(JSON.stringify({
+export const getResponse = <T>(code: number, message: string, data?: T) => new Response(JSON.stringify({
     code,
     message,
     data,
