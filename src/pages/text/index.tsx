@@ -106,7 +106,7 @@ export default function ClipBoardList() {
 	[])
 
 	const deleteItem = useCallback(async (i: ClipBoard) => {
-		const succ = await deleteClipBoardList([i.id]);
+		const succ = await deleteClipBoardList([i._id]);
 		if (!succ) {
 			openTip({
 				content: '请求失败了哦～',

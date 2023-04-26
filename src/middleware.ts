@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getUserToken } from './api-tools/token';
 import { NextRequestWithContext } from './global';
+import { HeaderKey } from './constants/string';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequestWithContext) {
@@ -34,8 +35,8 @@ export async function middleware(request: NextRequestWithContext) {
     }
 
     const h = new Headers();
-    h.set('uid', get.userid);
-    h.set('username', get.username);
+    h.set(HeaderKey.UID, get.userid);
+    h.set(HeaderKey.USERNAME, get.username);
     return NextResponse.next({
         request: {
             headers: h,

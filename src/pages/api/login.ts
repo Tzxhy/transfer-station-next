@@ -5,8 +5,8 @@ import { genUserToken } from "@/api-tools/token";
 import type { NextRequest } from "next/server";
 
 export const config = {
-  runtime: 'edge',
-  regions: ['hk'], // defaults to 'all'
+    runtime: 'edge',
+    regions: ['hk'], // defaults to 'all'
 }
 
 type User = {
@@ -17,7 +17,7 @@ type User = {
 }
 
 export default async function handler(
-  req: NextRequest
+    req: NextRequest
 ) {
     if (req.method !== 'POST') {
         return new Response(null, {
@@ -34,11 +34,8 @@ export default async function handler(
             password: data.password,
         },
     }).then(d => {
-
-        console.log('d in login then: ', d);
         return d.document as User | null;
     }).catch(e => {
-        console.log('e in login catch: ', e);
         return null;
     })
 

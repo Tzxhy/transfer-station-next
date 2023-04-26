@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { Container } from '@mui/material';
-import './index.module.scss'
+import styles from './index.module.scss'
 
 export default memo(function Loading() {
 
@@ -10,7 +10,7 @@ export default memo(function Loading() {
 		display: 'flex',
 		justifyContent: 'center',
 	}}>
-		<RefreshIcon className='loading' sx={{
+		<RefreshIcon className={styles.loading} sx={{
 			fontSize: 60,
 		}}/>
 	</Container>

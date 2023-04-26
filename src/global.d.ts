@@ -1,6 +1,3 @@
-import {
-	NextRequest,
-} from 'next/server';
 
 export type UserPayload = {
     username: string;
@@ -29,6 +26,3 @@ declare module 'bookmarks-to-json' {
 	}) => Bookmark[];
 }
 
-export class NextRequestWithContext extends NextRequest {
-	context: UserPayload;
-}

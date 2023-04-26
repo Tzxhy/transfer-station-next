@@ -8,8 +8,9 @@ const instance = axios.create({
             body: config.data,
             method: config.method,
             headers: config.headers,
-        }).then(d => {
+        }).then(async d => {
             if (d.status >= 300) {
+                console.log('d.text(): ', await d.text());
                 return Promise.reject(d)
             }
             return {
@@ -24,8 +25,29 @@ const instance = axios.create({
     },
 });
 
-console.log('process.env.DBKEY: ', process.env.DBKEY);
+
 export const api = createMongoDBDataAPI({
     apiKey: process.env.DBKEY as string,
     urlEndpoint: 'https://data.mongodb-api.com/app/data-xzlug/endpoint/data/v1'
 }, instance)
+
+export const support = async <T>(key: string, supportedValue: T, noRecordIsFalse = true) => {
+    return api.findOne<{
+        name: string;
+        value: T;
+    }>({
+        dataSource: 'Cluster0',
+        database: 'transfer',
+        collection: 'system',
+        filter: {
+            name: key,
+        }
+    }).then(d => {
+        if (!d.document) {
+            return noRecordIsFalse;
+        }
+        return d.document.value === supportedValue;
+    }).catch(e => {
+        return noRecordIsFalse;
+    })
+}

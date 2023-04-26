@@ -1,6 +1,6 @@
 import type { NextRequest } from "next/server";
 
-export const getName = () => 'jjj';
+
 
 export const getResponse = <T>(code: number, message: string, data?: T) => new Response(JSON.stringify({
     code,
@@ -11,6 +11,8 @@ export const getResponse = <T>(code: number, message: string, data?: T) => new R
         'content-type': 'application/json;charset=utf-8',
     },
 })
+
+export const paramNotValid = () => getResponse(-1, '参数校验失败');
 
 export const getJsonReq = async (req: NextRequest) => {
     const reader = req.body?.getReader()!

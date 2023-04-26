@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 import {
 	Container,
 	List,
@@ -23,7 +23,9 @@ export default memo(function ListInner(props: ListInnerProps) {
 		const target = e.currentTarget as HTMLElement;
 		const idx = Number(target.dataset.idx);
 		props.onDeleteItem(props.list[idx]);
-	}, [
+	},
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	[
 		props.onDeleteItem,
 		props.list,
 	]);
@@ -32,6 +34,7 @@ export default memo(function ListInner(props: ListInnerProps) {
 		const target = e.currentTarget as HTMLElement;
 		const idx = Number(target.dataset.idx);
 		props.onClickItem(props.list[idx]);
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [
 		props.onClickItem,
 		props.list,
@@ -50,7 +53,7 @@ export default memo(function ListInner(props: ListInnerProps) {
 			{
 				props.list.map((i, idx) => (
 					<ListItem
-						key={i.id}
+						key={i._id}
 						secondaryAction={
 							<IconButton edge="end" aria-label="delete" data-idx={idx} onClick={onClickDelete}>
 								<DeleteIcon />
