@@ -15,8 +15,10 @@ export const getResponse = <T>(code: number, message: string, data?: T) => new R
 export const paramNotValid = () => getResponse(-1, '参数校验失败');
 
 export const getJsonReq = async (req: NextRequest) => {
-    const reader = req.body?.getReader()!
+    if (!req.body) return null;
+    const reader = req.body.getReader()!
     let v = new Uint8Array(0);
+    // @ts-ignore
     await reader.read().then<any>(function p({done, value}) {
         if (done) {
             return;
