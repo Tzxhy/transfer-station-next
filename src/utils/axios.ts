@@ -20,7 +20,7 @@ instance.interceptors.request.use(v => {
 instance.interceptors.response.use(v => {
     if (v.status >= 200 && v.status < 300) {
         if (v.data.code >= 1000000 && v.data.code < 2000000 && !location.href.includes('login')) {
-            location.href = '/html/login/';
+            location.href = '/login/';
             throw new Error('登录状态受限')
         }
         return v.data;
