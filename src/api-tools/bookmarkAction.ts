@@ -13,10 +13,8 @@ export const getBookmarkAction = async (uid: string) => {
         },
         limit: 1,
     }).then(d => {
-        console.log('d in getBookmarkAction: ', d);
         return d.documents[0] as BookMarkAction;
     }).catch(e => {
-        console.log('e: ', e);
         return null;
     })
 }
@@ -27,13 +25,13 @@ export const addBookmarkAction = async (uid: string, type: string) => {
         database: 'transfer',
         collection: 'bookmark_actions',
         document: {
-            // a
+            uid,
+            type,
+            created_at: Date.now(),
         },
     }).then(d => {
-        console.log('d in getBookmarkAction: ', d);
-        // return d.documents[0] as BookMarkAction;
+        return d.insertedId;
     }).catch(e => {
-        console.log('e: ', e);
-        return null;
+        return '';
     })
 }

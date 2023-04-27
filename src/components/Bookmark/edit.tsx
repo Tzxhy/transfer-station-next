@@ -35,8 +35,8 @@ export default function EditBookMarkDialogBody(props: EditBookMark) {
 
 	useEffect(() => {
 		props.onChange(wrapperBookMark({
-			id: props.id ?? '',
-			created_at: props.created_at ?? '',
+			_id: props._id ?? '',
+			created_at: props.created_at ?? 0,
 			title: newTitle,
 			class: newClass,
 			link: newLink,

@@ -17,7 +17,7 @@ type BookMark = {
 }
 
 type BookMarkAction = {
-    aid: number;
+    _id: string;
     uid: string;
     action: string;
     created_at: number;

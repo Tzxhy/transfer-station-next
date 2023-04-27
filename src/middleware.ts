@@ -27,7 +27,6 @@ export async function middleware(request: NextRequestWithContext) {
             message: 'token无效',
         })
     }
-    console.log('get: ', get);
 
     request.context = {
         ...request.context,
@@ -46,7 +45,9 @@ export async function middleware(request: NextRequestWithContext) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: [
-    '/api/text'
-  ],
+    matcher: [
+        '/api/text',
+        '/api/bookmark',
+        '/api/favicon',
+    ],
 }

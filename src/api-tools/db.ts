@@ -3,14 +3,13 @@ import axios, { AxiosHeaders } from 'axios';
 
 const instance = axios.create({
     adapter: (config) => {
-        // console.log('config: ', config);
         return fetch(config.url!, {
             body: config.data,
             method: config.method,
             headers: config.headers,
         }).then(async d => {
             if (d.status >= 300) {
-                console.log('d.text(): ', await d.text());
+                console.log('fetch fail: ', await d.text());
                 return Promise.reject(d)
             }
             return {

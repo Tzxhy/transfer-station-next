@@ -9,23 +9,23 @@ const domain = ''
 
 const instance = axios.create();
 instance.interceptors.request.use(v => {
-	v.url = domain + '/api' + v.url;
-	const token = getToken();
-	if (token) {
+    v.url = domain + '/api' + v.url;
+    const token = getToken();
+    if (token) {
 		v.headers!.Authorization = token;
-	}
-	return v;
+    }
+    return v;
 })
 
 instance.interceptors.response.use(v => {
-	if (v.status >= 200 && v.status < 300) {
-		if (v.data.code >= 1000000 && v.data.code < 2000000 && !location.href.includes('login')) {
-			location.href = '/html/login/';
-			throw new Error('登录状态受限')
-		}
-		return v.data;
-	}
-	return null;
+    if (v.status >= 200 && v.status < 300) {
+        if (v.data.code >= 1000000 && v.data.code < 2000000 && !location.href.includes('login')) {
+            location.href = '/html/login/';
+            throw new Error('登录状态受限')
+        }
+        return v.data;
+    }
+    return null;
 })
 
 export default instance;

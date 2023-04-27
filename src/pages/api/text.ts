@@ -102,9 +102,9 @@ async function PATCH(req: NextRequest) {
     const h = req.headers;
     const uid = h.get(HeaderKey.UID);
     const jsonReq = await getJsonReq(req) as {
-    ids: string[];
-    action: 'delete' | 'delete-all'
-  };
+        ids: string[];
+        action: 'delete' | 'delete-all'
+    };
     if (jsonReq.action === 'delete' && (!jsonReq.ids || !jsonReq.ids.length)) {
         return paramNotValid();
     }

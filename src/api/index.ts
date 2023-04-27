@@ -292,13 +292,14 @@ export async function deleteBookMark(list: string[], updateLocal = true) {
             },
         };
     }
-    return instance.delete<any, Resp<{
+    return instance.patch<any, Resp<{
 		successCount: number;
 		aid: string;
 	}>>('/bookmark', {
-	    data: {
-	        ids: list,
-	    },
+	    
+	    ids: list,
+	    action: 'delete',
+	    
 	}).then(d => {
 	    if (updateLocal) {
 	        const listData = getCacheData(BOOK_MARK_LIST_KEY) as ListDataItemWithCache<BookMark>[];
@@ -332,7 +333,7 @@ export function modifyBookMark(bookmark: ListDataItemWithCache<BookMark>, update
         };
     }
     return instance.put<any, Resp<{
-		successCount: number;
+		succ: boolean;
 		aid: string;
 	}>>('/bookmark', {
 	    ...bookmark,
@@ -356,11 +357,12 @@ export function modifyBookMark(bookmark: ListDataItemWithCache<BookMark>, update
 
 
 export function modifyBookMarks(bookmarks: ListDataItemWithCache<BookMark>[], updateLocal = true) {
-    return instance.post<any, Resp<{
+    return instance.patch<any, Resp<{
 		successCount: number;
 		aid: string;
-	}>>('/bookmark/modify-list', {
-	    list: bookmarks,
+	}>>('/bookmark', {
+	    updateList: bookmarks,
+	    action: 'update',
 	}).then(d => {
 	    if (updateLocal) {
 	        const originList = getCacheData(BOOK_MARK_LIST_KEY) as BookMark[];
@@ -381,7 +383,7 @@ export function modifyBookMarks(bookmarks: ListDataItemWithCache<BookMark>[], up
 }
 
 export function addBookMark(bookmark: ListDataItemWithCache<
-	Omit<BookMark, 'created_at' | 'id' | 'icon_id'>
+	Omit<BookMark, 'created_at' | '_id' | 'icon_id'>
 >, updateLocal = true) {
     if (config.nowUseOfflineMode) {
         const created_at = new Date().toISOString();
@@ -412,9 +414,7 @@ export function addBookMark(bookmark: ListDataItemWithCache<
     }
     return instance.post<any, Resp<{
 		id: string;
-		created_at: string;
-		icon_id: number;
-		aid: string;
+        aid: string;
 	}>>('/bookmark', {
 	    ...bookmark,
 	}).then(d => {
@@ -423,7 +423,7 @@ export function addBookMark(bookmark: ListDataItemWithCache<
 	        cacheData(BOOK_MARK_LIST_KEY, [
 				{
 				    ...bookmark,
-				    ...d.data,
+				    _id: d.data.id,
 				} as ListDataItemWithCache<BookMark>,
 				...originList,
 	        ]);
@@ -448,13 +448,14 @@ export function getFavicon(site: string) {
 	    },
 	});
 }
-export function createBookmarks(list: Omit<BookMark, 'created_at' | 'id'>[]) {
+export function createBookmarks(list: Omit<BookMark, 'created_at' | '_id'>[]) {
     if (config.nowUseOfflineMode) {
         return Promise.reject('离线模式禁用批量操作哦～');
     }
-    return instance.post<any, Resp<{
-	}>>('/bookmark/import-bookmark-list', {
+    return instance.patch<any, Resp<{
+	}>>('/bookmark', {
 	    list,
+	    action: 'import',
 	});
 }
 export function deleteAllBookmarks() {
@@ -462,5 +463,7 @@ export function deleteAllBookmarks() {
         return Promise.reject('离线模式下禁止删除全部哦～');
     }
 
-    return instance.delete('/bookmark/delete-all-bookmark');
+    return instance.patch('/bookmark', {
+        action: 'delete-all',
+    });
 }

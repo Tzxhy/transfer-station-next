@@ -15,7 +15,7 @@ export type GenerateBookmark = {
  * @return {*}  {string} HTML
  */
 export function generateBookMarkHtml(bookmark: GenerateBookmark): string {
-	let str = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
+    let str = `<!DOCTYPE NETSCAPE-Bookmark-file-1>
 <!-- This is an automatically generated file.
      It will be read and overwritten.
      DO NOT EDIT! -->
@@ -24,41 +24,41 @@ export function generateBookMarkHtml(bookmark: GenerateBookmark): string {
 <H1>Bookmarks</H1>
 <DL><p>
 `
-	const loop = (root: GenerateBookmark[]) => {
-		let str = [] as string[];
-		root.forEach((item) => {
-			if (item.folder) {
-				str.push(`<DT><H3${item.toolbar ? ` PERSONAL_TOOLBAR_FOLDER="true"` : ''}>${item.name}</H3>`);
-				str.push(`<DL><p>`);
-				if (item.children?.length) {
-					str.push(...loop(item.children));
-				}
-				str.push(`</DL><p>`)
-			} else {
-				str.push(`<DT><A HREF="${item.url}">${item.name}</A>`)
-			}
-		})
-		return str
-	}
-	const r = loop([bookmark])
-	let currentPaddingPrefix = 4;
-	const getPaddingPrefix = () => ' '.repeat(currentPaddingPrefix);
-	r.forEach(i => {
-		if (i === '<DL><p>') {
-			str += getPaddingPrefix() + i + '\n';
-			currentPaddingPrefix += 4;
-		} else if (i === '</DL><p>') {
-			currentPaddingPrefix -= 4;
-			str += getPaddingPrefix() + i + '\n';
-		} else {
-			str += getPaddingPrefix() + i + '\n';
-		}
+    const loop = (root: GenerateBookmark[]) => {
+        let str = [] as string[];
+        root.forEach((item) => {
+            if (item.folder) {
+                str.push(`<DT><H3${item.toolbar ? ` PERSONAL_TOOLBAR_FOLDER="true"` : ''}>${item.name}</H3>`);
+                str.push(`<DL><p>`);
+                if (item.children?.length) {
+                    str.push(...loop(item.children));
+                }
+                str.push(`</DL><p>`)
+            } else {
+                str.push(`<DT><A HREF="${item.url}">${item.name}</A>`)
+            }
+        })
+        return str
+    }
+    const r = loop([bookmark])
+    let currentPaddingPrefix = 4;
+    const getPaddingPrefix = () => ' '.repeat(currentPaddingPrefix);
+    r.forEach(i => {
+        if (i === '<DL><p>') {
+            str += getPaddingPrefix() + i + '\n';
+            currentPaddingPrefix += 4;
+        } else if (i === '</DL><p>') {
+            currentPaddingPrefix -= 4;
+            str += getPaddingPrefix() + i + '\n';
+        } else {
+            str += getPaddingPrefix() + i + '\n';
+        }
 		
 		
-	})
+    })
 	
-	str += `
+    str += `
 </DL><p>
 `
-	return str
+    return str
 }

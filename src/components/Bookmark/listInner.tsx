@@ -21,7 +21,7 @@ import React, {
 	useEffect,
 	useRef
 } from 'react';
-import { BookMark, BookMarkWithGet } from '../../api';
+import { BookMarkWithGet } from '../../api';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { VariableSizeList, ListChildComponentProps } from 'react-window';
 import { isPc } from '../../utils/env';
@@ -139,7 +139,7 @@ export default memo(function ListInner(props: ListInnerProps) {
 					</Grid>
 				</Grid>
 				{
-					i.list.map((j: BookMarkWithGet, jIdx: number) => (<Grid item key={j.id} xs={12} sm={6} md={4} lg={3}>
+					i.list.map((j: BookMarkWithGet, jIdx: number) => (<Grid item key={j._id} xs={12} sm={6} md={4} lg={3}>
 						<Card sx={{
 							height: '100%',
 							position: 'relative',
@@ -236,7 +236,7 @@ export default memo(function ListInner(props: ListInnerProps) {
 		return key;
 	}
 	return <Box
-		onContextMenu={e => e.preventDefault()}
+		// onContextMenu={e => e.preventDefault()}
 	>
 		<VariableSizeList
 			ref={ref}

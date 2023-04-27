@@ -1,4 +1,4 @@
-import { api } from "@/api-tools/db";
+import { resolve } from '@/utils/url';
 import { getJsonReq, getResponse } from "@/api-tools/common";
 import { getNewString } from "@/api-tools/id";
 import { genUserToken } from "@/api-tools/token";
@@ -7,7 +7,7 @@ import { support } from "@/api-tools/db";
 import { HeaderKey } from "@/constants/string";
 import { ImageError, getIconByDomain, setIconByDomain } from "@/api-tools/icons";
 import * as cheerio from 'cheerio';
-import NodeUrl from 'url';
+import { getHostname, paddingHttpUrl } from "@/utils/network";
 
 export const config = {
     runtime: "edge",
@@ -32,10 +32,10 @@ export default async function handler(req: NextRequest) {
         site: n.searchParams.get('site') || '',
     };
 
-    const s = new URL(jsonReq.site);
-
-    const hostname = s.hostname;
-    console.log('hostname: ', hostname);
+    const hostname = getHostname(jsonReq.site);
+    if (!hostname) {
+        return getResponse(9000000, '参数无效');
+    }
     const img = await getIconByDomain(hostname)
     if (img) {
         console.log('图像使用缓存');
@@ -66,14 +66,10 @@ async function getSiteFavicon(site: string): Promise<string> {
 
     const originScheme = originUrl.protocol
     const originHostname = originUrl.hostname
-
-    const [body, finalURL] = await httpRequest(site);
-
-    let iconPath = originScheme + '://' + originHostname + '/favicon.ico'
+    let iconPath = originScheme + '//' + originHostname + '/favicon.ico'
 
     const returnWithImage = async (imgUrl: string): Promise<string> => {
         let imageString = imgUrl
-        console.log('imgUrl: ', imgUrl);
         if (!imageString.startsWith('data')) {
             imageString = await getSiteFaviconByUrl(imgUrl)
         }
@@ -83,6 +79,12 @@ async function getSiteFavicon(site: string): Promise<string> {
 
         return imageString
     }
+
+    const [body, finalURL] = await httpRequest(site).catch(e => {
+        return ['error']
+    });
+    console.log('finalURL: ', finalURL);
+    if (body === 'error') return ImageError;
 
     if (!body) return returnWithImage(iconPath)
 
@@ -139,23 +141,20 @@ function combineFaviconUrlString(url: string, href: string): string {
     if (iconPath.startsWith('data')) {
 
     } else {
-        if (!href.includes('//')) {
-            if (href[0] === '/') {
-                iconPath = u.hostname + href;
-                if (u.protocol !== '') {
-                    iconPath = u.protocol + '://' + iconPath
-                }
-            } else {
-                iconPath = NodeUrl.resolve(url, href)
+        if (!href.includes('//')) { // 不包含// 那么是相对路径或者绝对路径
+            if (href[0] === '/') { // 绝对路径
+                iconPath = u.protocol + '//'+ u.hostname + href;
+            } else { // 相对
+                iconPath = resolve(u.protocol + '//' + u.hostname + u.pathname, href)
             }
         } else {
-            const p = NodeUrl.parse(href)
-            const s = p.protocol;
-            if (s === '') {
-                iconPath = p.protocol + ':' + iconPath
-            }
+            const p = new URL(paddingHttpUrl(href, {
+                protocol: u.protocol,
+            }))
+            iconPath = p.toString()
         }
     }
 
+    console.log('iconPath in combineFaviconUrlString: ', iconPath);
     return iconPath;
 }

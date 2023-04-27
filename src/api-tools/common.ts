@@ -37,3 +37,12 @@ export const getJsonReq = async (req: NextRequest) => {
         return null;
     }
 }
+
+export const getHostname = (s: string) => {
+    try {
+        const n = new URL(s);
+        return n.hostname;
+    } catch(e) {
+        return '';
+    }
+}
