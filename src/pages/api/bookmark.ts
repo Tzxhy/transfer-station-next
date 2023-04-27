@@ -126,11 +126,7 @@ async function GET(req: NextRequest) {
     });
 
     let hostnames = datas.map(i => {
-        if (i.link.startsWith('http')) {
-            const u = new URL(i.link);
-            return u.hostname;
-        }
-        return '';
+        return getHostname(i.link);
     }).filter(Boolean);
 
     hostnames = [...new Set(hostnames)];
@@ -146,7 +142,7 @@ async function GET(req: NextRequest) {
     });
 
     datas.forEach(i => {
-        const h = new URL(i.link).hostname;
+        const h = getHostname(i.link);
         if (h in faviconObj) {
             i.icon = ''
         }

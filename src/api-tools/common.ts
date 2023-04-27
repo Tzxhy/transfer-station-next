@@ -40,9 +40,14 @@ export const getJsonReq = async (req: NextRequest) => {
     }
 }
 
-export const getHostname = (s: string) => {
+export const getHostname = (str: string) => {
+    if (!str.startsWith('http')) {
+        str = 'http:' + (
+            str.includes('//') ? '' : '//'
+        ) + str;
+    }
     try {
-        const n = new URL(s);
+        const n = new URL(str);
         return n.hostname;
     } catch(e) {
         return '';
