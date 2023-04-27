@@ -10,7 +10,7 @@ export async function genUserToken(name: string, userId: string): Promise<string
             username: name,
             userid: userId,
         })),
-      )
+    )
         .setProtectedHeader({ alg: 'HS256' })
         .sign(secret)
     return jws;
