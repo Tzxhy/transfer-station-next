@@ -6,7 +6,7 @@ import type { NextRequest } from "next/server";
 
 export const config = {
     runtime: 'edge',
-    regions: ['hk'], // defaults to 'all'
+    regions: ['hnd1', 'hkg1'],
 }
 
 type User = {

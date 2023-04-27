@@ -11,7 +11,7 @@ import { getHostname, paddingHttpUrl } from "@/utils/network";
 
 export const config = {
     runtime: "edge",
-    regions: ["hk"], // defaults to 'all'
+    regions: ['hnd1', 'hkg1'],
 };
 
 export default async function handler(req: NextRequest) {

@@ -7,7 +7,7 @@ import { support } from "@/api-tools/db";
 
 export const config = {
     runtime: "edge",
-    regions: ["hk"], // defaults to 'all'
+    regions: ['hnd1', 'hkg1'],
 };
 
 async function nowCanRegister(): Promise<boolean> {

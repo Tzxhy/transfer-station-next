@@ -11,7 +11,7 @@ import { runTask } from '@/utils/function';
 
 export const config = {
     runtime: "edge",
-    regions: ["hk"], // defaults to 'all'
+    regions: ['hnd1', 'hkg1'],
 };
 
 type Data = any;
