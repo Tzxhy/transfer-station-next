@@ -24,7 +24,7 @@ const instance = axios.create({
     },
 });
 
-console.log('process.env.DBKEY: ', process.env.DBKEY);
+
 export const api = createMongoDBDataAPI({
     apiKey: process.env.DBKEY as string,
     urlEndpoint: 'https://data.mongodb-api.com/app/data-xzlug/endpoint/data/v1'

@@ -126,9 +126,12 @@ async function GET(req: NextRequest) {
     });
 
     let hostnames = datas.map(i => {
-        const u = new URL(i.link);
-        return u.hostname;
-    });
+        if (i.link.startsWith('http')) {
+            const u = new URL(i.link);
+            return u.hostname;
+        }
+        return '';
+    }).filter(Boolean);
 
     hostnames = [...new Set(hostnames)];
 
