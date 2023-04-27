@@ -7,7 +7,6 @@ import {
 import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { ClipBoard } from '../../api';
 
 export default function Edit(props: {
 	onChange: (v: ClipBoard[]) => void;
@@ -32,7 +31,7 @@ export default function Edit(props: {
             type: 'text',
             note: note,
             created_at: '',
-            id: '',
+            _id: '',
         })));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [newString, note]);

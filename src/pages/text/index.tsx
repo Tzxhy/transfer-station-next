@@ -20,7 +20,6 @@ import { useCallback, useEffect, useState } from 'react';
 import React from 'react';
 
 import {
-	ClipBoard,
 	createClipBoard,
 	deleteAllClipBoardList,
 	deleteClipBoardList,

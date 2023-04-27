@@ -8,7 +8,6 @@ import {
     ListItemText
 } from '@mui/material';
 import { memo, useCallback } from 'react';
-import { ClipBoard } from '../../api';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 

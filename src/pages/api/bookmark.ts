@@ -156,7 +156,7 @@ async function GET(req: NextRequest) {
 
     faviconRetObj['*'] = ImageError;
 
-    const lastAnchor = lastAction?.aid ?? 0
+    const lastAnchor = lastAction?._id ?? ''
 
     return getResponse(0, '', {
         list: datas,

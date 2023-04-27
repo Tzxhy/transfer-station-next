@@ -2,15 +2,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getUserToken } from './api-tools/token';
-import { NextRequestWithContext } from './global';
 import { HeaderKey } from './constants/string';
 
 // This function can be marked `async` if using `await` inside
-export async function middleware(request: NextRequestWithContext) {
-    request.context = {
-        userid: '',
-        username: '',
-    };
+export async function middleware(request: NextRequest) {
+
     const token = request.headers.get('Authorization') as string;
     if (!token) {
 
@@ -26,11 +22,6 @@ export async function middleware(request: NextRequestWithContext) {
             code: 100_0000 + 1,
             message: 'token无效',
         })
-    }
-
-    request.context = {
-        ...request.context,
-        ...get,
     }
 
     const h = new Headers();
