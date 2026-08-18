@@ -500,9 +500,6 @@ export default function BookMarkList() {
                                     fullWidth
                                     size='small'
                                     variant="standard"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                    }}
                                 />
                             )}
                         />

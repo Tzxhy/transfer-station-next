@@ -83,7 +83,7 @@ export default function ClipBoardList() {
 	useEffect(() => {
 		debounceUpdateList();
 	}, 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+	 
 	[
 		list,
 		search,
@@ -101,7 +101,7 @@ export default function ClipBoardList() {
 			})
 		}
 	}, 
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+	 
 	[])
 
 	const deleteItem = useCallback(async (i: ClipBoard) => {
@@ -121,7 +121,7 @@ export default function ClipBoardList() {
 			getClipBoardData();
 		}
 	},
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+	 
 	[]);
 
 
@@ -258,7 +258,7 @@ export default function ClipBoardList() {
 						>
 							剪切板
 						</Typography>
-						<Typography variant="h5" align="center" color="text.secondary" paragraph onClick={setClipboard}>
+						<Typography variant="h5" align="center" color="text.secondary" sx={{ mb: 2 }} onClick={setClipboard}>
 							快速获取你在各处保存的剪切板文本内容(点击该处，快速复制最近一条数据)
 						</Typography>
 					</Container>
@@ -287,9 +287,6 @@ export default function ClipBoardList() {
 									fullWidth
 									size='small'
 									variant="standard"
-									InputProps={{
-										...params.InputProps,
-									}}
 								/>
 							)}
 						/>
@@ -348,8 +345,12 @@ export default function ClipBoardList() {
 							<SpeedDialAction
 								key={action.name}
 								icon={action.icon}
-								tooltipTitle={action.name}
-								tooltipOpen
+								title={action.name}
+								slotProps={{
+									tooltip: {
+										open: true,
+									},
+								}}
 								data-idx={idx}
 								onClick={handleSpeedDialClick}
 							/>

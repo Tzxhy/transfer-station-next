@@ -1,5 +1,5 @@
 allowBuilds:
-  '@parcel/watcher': set this to true or false
+  '@parcel/watcher': true
 
 overrides:
-  '@mui/material': '5.12.1'
+  react-is: 18.2.0

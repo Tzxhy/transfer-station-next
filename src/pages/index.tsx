@@ -1,5 +1,6 @@
 import {
     Box,
+    CssBaseline,
     List,
     ListItem,
     ListItemButton,
@@ -17,6 +18,7 @@ function App() {
 
     return (
         <CustomThemeProvider>
+            <CssBaseline />
             <Box sx={{
                 flexGrow: 1,
             }}>

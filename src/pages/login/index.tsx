@@ -111,15 +111,14 @@ export default function Login() {
 					height: '100%',
 					borderColor: 'divider',
 				}}>
-					<Grid item
-						sx={{
-							width: 0,
-							flexGrow: 1,
-							display: {
-								xs: 'none',
-								sm: 'block',
-							}
-						}}
+					<Grid sx={{
+						width: 0,
+						flexGrow: 1,
+						display: {
+							xs: 'none',
+							sm: 'block',
+						}
+					}}
 					>
 						<Box sx={{
 							height: '100%',
@@ -136,14 +135,14 @@ export default function Login() {
 
 					</Grid>
 
-					<Grid item sx={{
+					<Grid sx={{
 						flexGrow: 1,
 						width: 0,
 					}}>
 						<Grid container sx={{
 							width: '100%',
 						}}>
-							<Grid item sx={{
+							<Grid sx={{
 								pt: 8,
 								width: '100%',
 								display: 'flex',
@@ -158,7 +157,7 @@ export default function Login() {
 									color: 'text.primary',
 								}}>传送站</Typography>
 							</Grid>
-							<Grid item sx={{
+							<Grid sx={{
 								pt: 6,
 								px: 4,
 								width: '100%',
@@ -170,17 +169,17 @@ export default function Login() {
 									fullWidth size='small' label="用户名" variant="outlined" />
 							</Grid>
 
-							<Grid item sx={{
-								pt: 4,
-								px: 4,
-								width: '100%',
-							}}>
-								<PasswordInput key={'p1-' + isRegister} label="密码" value={password} handleChange={(e) => {
+							<Grid sx={{
+									pt: 4,
+									px: 4,
+									width: '100%',
+								}}>
+									<PasswordInput key={'p1-' + isRegister} label="密码" value={password} handleChange={(e) => {
 									setPassword(e.target.value)
 								}} />
 							</Grid>
 							{
-								isRegister ? <Grid item sx={{
+								isRegister ? <Grid sx={{
 									pt: 4,
 									px: 4,
 									width: '100%',
@@ -201,11 +200,11 @@ export default function Login() {
 								</Box> : null
 							}
 
-							<Grid item sx={{
-								pt: isRegister ? 4 : 6,
-								px: 4,
-								width: '100%',
-							}}>
+							<Grid sx={{
+									pt: isRegister ? 4 : 6,
+									px: 4,
+									width: '100%',
+								}}>
 								<Button fullWidth size='large' variant="contained" onClick={clickLoginOrRegister}>
 									{
 										isRegister ? '注册' : '登录'
@@ -213,13 +212,13 @@ export default function Login() {
 								</Button>
 							</Grid>
 
-							<Grid item sx={{
-								pt: 4,
-								px: 4,
-								width: '100%',
-								display: 'flex',
-								justifyContent: 'flex-end',
-							}}>
+							<Grid sx={{
+									pt: 4,
+									px: 4,
+									width: '100%',
+									display: 'flex',
+									justifyContent: 'flex-end',
+								}}>
 								{
 									isRegister ? <Button
 										size="small" onClick={goToLogin}

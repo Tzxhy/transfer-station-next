@@ -94,16 +94,20 @@ export default memo(function ListInner(props: ListInnerProps) {
 			}} sx={{
 				pb: 4,
 			}}>
-				<Grid item xs={12}>
-					<Grid container alignItems='flex-end'>
-						<Grid item xs={7} sm={8}>
+				<Grid size={12}>
+					<Grid container sx={{
+						alignItems: 'flex-end',
+					}}>
+						<Grid size={{ xs: 7, sm: 8 }}>
 							<Typography variant='h4' className='one-line'>
 								{
 									i.class.replace('书签栏' + BOOKMARK_CLASS_DIVIDER, '')
 								}
 							</Typography>
 						</Grid>
-						<Grid container item xs={5} sm={4} justifyContent='flex-end'>
+						<Grid container size={{ xs: 5, sm: 4 }} sx={{
+							justifyContent: 'flex-end',
+						}}>
 							{
 								isPcEnv ? <>
 									<Button
@@ -139,7 +143,7 @@ export default memo(function ListInner(props: ListInnerProps) {
 					</Grid>
 				</Grid>
 				{
-					i.list.map((j: BookMarkWithGet, jIdx: number) => (<Grid item key={j._id} xs={12} sm={6} md={4} lg={3}>
+					i.list.map((j: BookMarkWithGet, jIdx: number) => (<Grid key={j._id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
 						<Card sx={{
 							height: '100%',
 							position: 'relative',

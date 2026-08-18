@@ -73,17 +73,14 @@ export default function EditBookMarkDialogBody(props: EditBookMark) {
 				setNewClass(newInputValue || '');
 			}}
 			renderInput={(params) => (
-				<TextField
-					{...params}
-					margin="dense"
-					label="分类"
-					fullWidth
-					variant="standard"
-					InputProps={{
-						...params.InputProps,
-					}}
-				/>
-			)}
+			<TextField
+				{...params}
+				margin="dense"
+				label="分类"
+				fullWidth
+				variant="standard"
+			/>
+		)}
 		/>
 		<TextField
 			margin="dense"

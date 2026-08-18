@@ -51,9 +51,6 @@ export default function Edit(props: {
                     label="备注"
                     fullWidth
                     variant="standard"
-                    InputProps={{
-                        ...params.InputProps,
-                    }}
                 />
             )}
         />
