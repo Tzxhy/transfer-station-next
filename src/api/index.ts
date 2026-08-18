@@ -251,7 +251,7 @@ export async function getBookMarkList() {
 		last_anchor: number;
 	}>>('/bookmark', {
 	    params: {
-	        last_anchor: getCacheData(BOOK_MARK_LIST_ANCHOR_KEY) || '',
+	        // last_anchor: getCacheData(BOOK_MARK_LIST_ANCHOR_KEY) || '',
 	    },
 	}).then(d => {
 	    if (d.code === 0) {

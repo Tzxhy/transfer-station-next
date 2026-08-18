@@ -7,25 +7,25 @@ import { api } from "@/api-tools/db";
 import { ImageError, getIconsByDomains, setIconByDomain } from "@/api-tools/icons";
 import { HeaderKey } from "@/constants/string";
 import type { NextRequest } from "next/server";
+import type { NextApiResponse } from "next";
 import { runTask } from '@/utils/function';
 
 export const config = {
-    runtime: "edge",
-    regions: ['hnd1', 'hkg1'],
+    runtime: "nodejs",
 };
 
 type Data = any;
 
-export default async function handler(req: NextRequest) {
+export default async function handler(req: NextRequest, res: NextApiResponse) {
     switch (req.method.toLowerCase()) {
     case 'get':
-        return GET(req);
+        return GET(req, res);
     case 'post':
-        return POST(req);
+        return POST(req, res);
     case 'patch':
-        return PATCH(req);
+        return PATCH(req, res);
     case 'put':
-        return PUT(req);
+        return PUT(req, res);
     default:
         break;
     }
@@ -38,9 +38,9 @@ const ApiDefaultConfig = {
 }
 
 // 修改
-async function PUT(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID) as string;
+async function PUT(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID] as string;
     const jsonReq = await getJsonReq(req) as {
         _id: string;
         class: string;
@@ -85,7 +85,7 @@ async function PUT(req: NextRequest) {
         aid = await addBookmarkAction(uid, 'modify');
     }
 
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         succ: isUpdated,
         aid,
     })
@@ -93,19 +93,19 @@ async function PUT(req: NextRequest) {
 
 
 
-async function GET(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID) as string;
-    const n = new URL(req.url);
-    
-    const jsonReq =  {
+async function GET(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID] as string;
+    const n = new URL(req.url, 'http://localhost');
+
+    const jsonReq = {
         last_anchor: n.searchParams.get('last_anchor') || '',
     };
 
     const lastAction = await getBookmarkAction(uid)
     if (jsonReq.last_anchor) { // 查找相对
         if (lastAction?._id === jsonReq.last_anchor) {
-            return getResponse(0, '', {
+            return getResponse(res, 0, '', {
                 list: [],
                 last_anchor_match: true,
                 last_anchor: jsonReq.last_anchor,
@@ -157,7 +157,7 @@ async function GET(req: NextRequest) {
 
     const lastAnchor = lastAction?._id ?? ''
 
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         list: datas,
         icons: faviconRetObj,
         last_anchor_match: false,
@@ -165,9 +165,9 @@ async function GET(req: NextRequest) {
     })
 }
 // 添加一项
-async function POST(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID) as string;
+async function POST(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID] as string;
     const jsonReq = await getJsonReq(req) as {
         class: string;
         title: string;
@@ -185,6 +185,7 @@ async function POST(req: NextRequest) {
         ...ApiDefaultConfig,
         document: {
             created_at: Date.now(),
+            uid,
             class: jsonReq.class,
             title: jsonReq.title,
             link: jsonReq.link,
@@ -199,21 +200,21 @@ async function POST(req: NextRequest) {
 
     if (newId) {
         const aid = await addBookmarkAction(uid, 'add')
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             id: newId,
             aid,
         })
     }
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         id: '',
         aid: '',
     })
 
 }
 
-async function PATCH(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID) as string;
+async function PATCH(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID] as string;
     const jsonReq = await getJsonReq(req) as {
         list?: Pick<BookMark, 'class' | 'title' | 'link' | 'icon'>[];
         action: 'import' | 'delete' | 'delete-all' | 'update';
@@ -226,42 +227,42 @@ async function PATCH(req: NextRequest) {
         'delete-all',
         'update',
     ].includes(jsonReq.action)) {
-        return paramNotValid();
+        return paramNotValid(res);
     }
     if (jsonReq.action === 'delete' && (!jsonReq.ids || !jsonReq.ids.length)) {
-        return paramNotValid();
+        return paramNotValid(res);
     }
     if (jsonReq.action === 'import' && (!jsonReq.list || !jsonReq.list.length)) {
-        return paramNotValid();
+        return paramNotValid(res);
     }
     if (jsonReq.action === 'update' && (!jsonReq.updateList || !jsonReq.updateList.length)) {
-        return paramNotValid();
+        return paramNotValid(res);
     }
     const getAid = (type: string) => addBookmarkAction(uid, type)
     
     if (jsonReq.action === 'import') {
         const newIds = await importList(uid, jsonReq.list!);
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             ids: newIds,
             successCount: newIds.length,
             aid: await getAid('import'),
         })
     }
     if (jsonReq.action === 'delete') {
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             successCount: await deleteList(uid, jsonReq.ids!),
             aid: await getAid('delete'),
         })
     }
 
     if (jsonReq.action === 'delete-all') {
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             successCount: await deleteAll(uid),
             aid: await getAid('delete-all'),
         })
     }
     if (jsonReq.action === 'update') {
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             successCount: await updateList(uid, jsonReq.updateList!),
             aid: await getAid('update'),
         })

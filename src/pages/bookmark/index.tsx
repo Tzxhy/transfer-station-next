@@ -51,7 +51,7 @@ type BookMarkListItem = {
 
 let menuClose!: () => void;
 
-export default function ClipBoardList() {
+export default function BookMarkList() {
 
     const currentBookMarkRef = useRef<BookMarkWithGet | null>(null);
     const [list, updateList, listRef] = useStateRef<BookMarkListItem[]>([]);
@@ -222,6 +222,17 @@ export default function ClipBoardList() {
                 title: '删除',
                 onClick: () => {
                     deleteBookmarksWithRevoke([currentBookMarkRef.current!]);
+                },
+            },
+            {
+                title: '拷贝地址',
+                onClick: async () => {
+                    await navigator.clipboard.writeText(currentBookMarkRef.current!.link);
+                    openTip({
+                        color: 'success',
+                        content: '成功拷贝地址',
+                    });
+                    menuClose();
                 },
             },
         ],

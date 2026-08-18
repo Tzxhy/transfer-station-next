@@ -1,31 +1,26 @@
 import { resolve } from '@/utils/url';
 import { getJsonReq, getResponse } from "@/api-tools/common";
-import { getNewString } from "@/api-tools/id";
-import { genUserToken } from "@/api-tools/token";
+
 import { NextRequest } from "next/server";
-import { support } from "@/api-tools/db";
-import { HeaderKey } from "@/constants/string";
+import type { NextApiResponse } from "next";
 import { ImageError, getIconByDomain, setIconByDomain } from "@/api-tools/icons";
 import * as cheerio from 'cheerio';
 import { getHostname, paddingHttpUrl } from "@/utils/network";
 
 export const config = {
-    runtime: "edge",
-    regions: ['hnd1', 'hkg1'],
+    runtime: "nodejs",
 };
 
-export default async function handler(req: NextRequest) {
+export default async function handler(req: NextRequest, res: NextApiResponse) {
     if (req.method !== "GET") {
-        return new Response(null, {
-            status: 405, // method not allowed
-        });
+        return res.status(405).end(); // method not allowed
     }
     const h = req.headers;
     let n;
     try {
-        n = new URL(req.url);
+        n = new URL(req.url, 'http://localhost');
     } catch(e) {
-        return getResponse(9000000, '参数无效')
+        return getResponse(res, 9000000, '参数无效')
     }
     
     const jsonReq =  {
@@ -34,13 +29,13 @@ export default async function handler(req: NextRequest) {
 
     const hostname = getHostname(jsonReq.site);
     if (!hostname) {
-        return getResponse(9000000, '参数无效');
+        return getResponse(res, 9000000, '参数无效');
     }
     const img = await getIconByDomain(hostname)
     if (img) {
         console.log('图像使用缓存');
         
-        return getResponse(0, '', {
+        return getResponse(res, 0, '', {
             img: img.image,
             domain: hostname,
         })
@@ -52,7 +47,7 @@ export default async function handler(req: NextRequest) {
     if (imgString !== ImageError) {
         await setIconByDomain(hostname, imgString)
     }
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         img: imgString,
         domain: hostname,
     })

@@ -3,11 +3,11 @@ import { api } from "@/api-tools/db";
 import { getNewString } from "@/api-tools/id";
 import { HeaderKey } from '@/constants/string';
 import { NextRequest } from 'next/server';
+import type { NextApiResponse } from 'next';
 
 
 export const config = {
-    runtime: 'edge',
-    regions: ['hnd1', 'hkg1'],
+    runtime: 'nodejs',
 }
 
 const ApiDefaultConfig = {
@@ -26,23 +26,24 @@ type Text = {
 }
 
 export default async function handler(
-    req: NextRequest
+    req: NextRequest,
+    res: NextApiResponse,
 ) {
     switch (req.method.toLowerCase()) {
     case 'get':
-        return GET(req);
+        return GET(req, res);
     case 'post':
-        return POST(req);
+        return POST(req, res);
     case 'patch':
-        return PATCH(req);
+        return PATCH(req, res);
     default:
         break;
     }
 }
 
-async function GET(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID);
+async function GET(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID];
     const data = await api.find({
         ...ApiDefaultConfig,
         filter: {
@@ -57,15 +58,15 @@ async function GET(req: NextRequest) {
         return [] as Text[];
     });
 
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         list: data,
         total_count: data.length,
     })
 }
 
-async function POST(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID);
+async function POST(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID];
     const jsonReq = await getJsonReq(req) as {
         list: ClipBoard[];
     }
@@ -90,7 +91,7 @@ async function POST(req: NextRequest) {
     }).catch(e => {
         return 0;
     })
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         ids: rids,
         successCount: successLength,
         created_at: now,
@@ -98,15 +99,15 @@ async function POST(req: NextRequest) {
 }
 
 // 删除ids
-async function PATCH(req: NextRequest) {
-    const h = req.headers;
-    const uid = h.get(HeaderKey.UID);
+async function PATCH(req: NextRequest, res: NextApiResponse) {
+    const h = req.headers as unknown as Record<string, string | undefined>;
+    const uid = h[HeaderKey.UID];
     const jsonReq = await getJsonReq(req) as {
         ids: string[];
         action: 'delete' | 'delete-all'
     };
     if (jsonReq.action === 'delete' && (!jsonReq.ids || !jsonReq.ids.length)) {
-        return paramNotValid();
+        return paramNotValid(res);
     }
     const filter = {
         uid,
@@ -128,7 +129,7 @@ async function PATCH(req: NextRequest) {
         console.log('e: ', e);
         return 0;
     })
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         successCount: count,
     })
 }
