@@ -41,5 +41,6 @@ export const config = {
         '/api/text',
         '/api/bookmark',
         '/api/favicon',
+        '/api/file',
     ],
 }

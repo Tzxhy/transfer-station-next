@@ -18,6 +18,7 @@
     "@types/react": "18.0.38",
     "@types/react-dom": "18.0.11",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/blob": "^2.8.0",
     "@vercel/functions": "^3.9.3",
     "@vercel/global-config": "^1.5.1",
     "axios": "^1.19.0",

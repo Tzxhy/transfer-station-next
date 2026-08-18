@@ -48,6 +48,15 @@ function App() {
                             </ListItemButton>
                         </Link>
                     </ListItem>
+                    <ListItem>
+                        <Link style={{width: '100%'}} href='/file'>
+                            <ListItemButton>
+
+                                <ListItemText primary="文件" />
+
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
                 </List>
             </Box>
         </CustomThemeProvider>

@@ -9,6 +9,54 @@ export type Resp<T> = {
 	data: T;
 }
 
+export type FileItem = {
+	name: string;
+	pathname: string;
+	url: string;
+	size: number;
+	uploadedAt: string;
+}
+
+/** 文件列表 */
+export function getFileList() {
+    return instance.get<any, Resp<{
+		uid: string;
+		list: FileItem[];
+		total_count: number;
+	}>>('/file');
+}
+
+/** 重命名文件 */
+export function renameFile(pathname: string, newName: string) {
+    return instance.patch<any, Resp<{
+		successCount: number;
+		pathname: string;
+	}>>('/file', {
+	    action: 'rename',
+	    pathname,
+	    newName,
+	});
+}
+
+/** 删除文件（按 blob url） */
+export function deleteFileList(urls: string[]) {
+    return instance.patch<any, Resp<{
+		successCount: number;
+	}>>('/file', {
+	    action: 'delete',
+	    urls,
+	});
+}
+
+/** 删除当前用户所有文件 */
+export function deleteAllFileList() {
+    return instance.patch<any, Resp<{
+		successCount: number;
+	}>>('/file', {
+	    action: 'delete-all',
+	});
+}
+
 export function register(username: string, password: string) {
     return instance.post<any, Resp<{
 		username: string;
