@@ -1,0 +1,5 @@
+allowBuilds:
+  '@parcel/watcher': set this to true or false
+
+overrides:
+  '@mui/material': '5.12.1'

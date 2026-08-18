@@ -3,10 +3,10 @@ import { getJsonReq, getResponse } from "@/api-tools/common";
 import { api } from "@/api-tools/db";
 import { genUserToken } from "@/api-tools/token";
 import type { NextRequest } from "next/server";
+import type { NextApiResponse } from "next";
 
 export const config = {
-    runtime: 'edge',
-    regions: ['hnd1', 'hkg1'],
+    runtime: 'nodejs',
 }
 
 type User = {
@@ -17,12 +17,11 @@ type User = {
 }
 
 export default async function handler(
-    req: NextRequest
+    req: NextRequest,
+    res: NextApiResponse,
 ) {
     if (req.method !== 'POST') {
-        return new Response(null, {
-            status: 405, // method not allowed
-        });
+        return res.status(405).end(); // method not allowed
     }
     const data = await getJsonReq(req)
     const record = await api.findOne({
@@ -40,12 +39,12 @@ export default async function handler(
     })
 
     if (!record) {
-        return getResponse(1000003, '用户名或者密码错误')
+        return getResponse(res, 1000003, '用户名或者密码错误')
     }
 
     const token = await genUserToken(data.username, record.uid)
 
-    return getResponse(0, '', {
+    return getResponse(res, 0, '', {
         username: data.username,
         token,
     })

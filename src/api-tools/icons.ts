@@ -39,13 +39,16 @@ export const setIconByDomain = async (domain: string, img: string) => {
             domain,
         },
         update: {
-            domain,
-            image: img,
-        } as Icon,
+            $set: {
+                domain,
+                image: img,
+            },
+        },
         upsert: true,
     }).then(d => {
         return d.upsertedId;
     }).catch(e => {
+        console.log('e 更新失败: ', e);
         return ''
     })
 }

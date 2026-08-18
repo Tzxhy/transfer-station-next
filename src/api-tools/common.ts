@@ -1,43 +1,29 @@
 import type { NextRequest } from "next/server";
+import type { NextApiResponse } from "next";
 
 
 
-export const getResponse = <T>(code: number, message: string, data?: T) => new Response(JSON.stringify({
-    code,
-    message,
-    data,
-}), {
-    headers: {
-        'content-type': 'application/json;charset=utf-8',
-    },
-})
+export const getResponse = <T>(res: NextApiResponse, code: number, message: string, data?: T) => {
+    res.json({
+        code,
+        message,
+        data,
+    });
+}
 
-export const paramNotValid = () => getResponse(-1, '参数校验失败');
+export const paramNotValid = (res: NextApiResponse) => getResponse(res, -1, '参数校验失败');
 
 export const getJsonReq = async (req: NextRequest) => {
-    if (!req.body) return null;
-    const reader = req.body.getReader()!
-    let v = new Uint8Array(0);
-    // @ts-ignore
-    await reader.read().then<any>(function p({done, value}) {
-        if (done) {
-            return;
+    // pages/api 的 req.body 已由 bodyParser 解析为 JSON 对象，经过 proxy 转发后可能退化为 JSON 字符串
+    let body = (req as any).body ?? null;
+    if (typeof body === 'string') {
+        try {
+            body = body ? JSON.parse(body) : null;
+        } catch (e) {
+            body = null;
         }
-        const l = v.byteLength + value.byteLength
-        const nv = new Uint8Array(l)
-        nv.set(v);
-        nv.set(value, v.byteLength)
-        v = nv;
-        return reader.read().then(p);
-    })
-    const e = new TextDecoder('utf-8')
-    const decoded = e.decode(v)
-    try {
-        const json = JSON.parse(decoded)
-        return json;
-    } catch(e) {
-        return null;
     }
+    return body;
 }
 
 export const getHostname = (str: string) => {
