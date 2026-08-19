@@ -64,7 +64,7 @@ export default memo(function ListInner(props: ListInnerProps) {
                                 textAlign: 'left',
                             }} data-idx={idx} onClick={onClickItem}>
                                 <ListItemText
-                                    primary={i.content}
+                                    primary={'*'.repeat(i.content.length)}
                                     secondary={i.note}
                                     sx={{
                                         wordBreak: 'break-word',
