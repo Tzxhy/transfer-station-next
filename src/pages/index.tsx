@@ -57,6 +57,15 @@ function App() {
                             </ListItemButton>
                         </Link>
                     </ListItem>
+                    <ListItem>
+                        <Link style={{width: '100%'}} href='/short'>
+                            <ListItemButton>
+
+                                <ListItemText primary="短链" />
+
+                            </ListItemButton>
+                        </Link>
+                    </ListItem>
                 </List>
             </Box>
         </CustomThemeProvider>

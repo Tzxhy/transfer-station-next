@@ -1,7 +1,6 @@
 import { api } from "./db"
 
 const ApiDefaultConfig = {
-    dataSource: 'Cluster0',
     database: 'transfer',
     collection: 'icons',
 }

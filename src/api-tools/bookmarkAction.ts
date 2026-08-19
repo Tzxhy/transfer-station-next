@@ -2,7 +2,6 @@ import { api } from "./db"
 
 export const getBookmarkAction = async (uid: string) => {
     return api.find({
-        dataSource: 'Cluster0',
         database: 'transfer',
         collection: 'bookmark_actions',
         filter: {
@@ -21,7 +20,6 @@ export const getBookmarkAction = async (uid: string) => {
 
 export const addBookmarkAction = async (uid: string, type: string) => {
     return api.insertOne({
-        dataSource: 'Cluster0',
         database: 'transfer',
         collection: 'bookmark_actions',
         document: {

@@ -32,7 +32,7 @@ export default async function handler(req: NextRequest, res: NextApiResponse) {
 }
 
 const ApiDefaultConfig = {
-    dataSource: 'Cluster0',
+
     database: 'transfer',
     collection: 'bookmarks',
 }

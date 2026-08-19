@@ -79,6 +79,55 @@ export function login(username: string, password: string) {
 	});
 }
 
+/** 修改密码（oldPassword / newPassword 均为 sha256 后的密文） */
+export function changePassword(oldPassword: string, newPassword: string) {
+    return instance.post<any, Resp<{
+		success: boolean;
+	}>>('/change-password', {
+	    oldPassword,
+	    newPassword,
+	});
+}
+
+export type ShortLinkItem = {
+    _id: string;
+    uid: string;
+    note: string;
+    url: string;
+    path: string;
+    hits: number;
+    created_at: number;
+}
+
+/** 创建短链 */
+export function createShortLink(params: {
+	note?: string;
+	url: string;
+	customPath?: string;
+}) {
+    return instance.post<any, Resp<{
+		shortUrl: string;
+		path: string;
+	}>>('/short-link', params);
+}
+
+/** 获取当前用户的短链列表 */
+export function getShortLinkList() {
+    return instance.get<any, Resp<{
+		list: ShortLinkItem[];
+	}>>('/short-link');
+}
+
+/** 删除短链 */
+export function deleteShortLink(ids: string[]) {
+    return instance.patch<any, Resp<{
+		successCount: number;
+	}>>('/short-link', {
+	    ids,
+	    action: 'delete',
+	});
+}
+
 
 const CLIP_BOARD_LIST_KEY = 'CLIP_BOARD_LIST_KEY_NEW'
 

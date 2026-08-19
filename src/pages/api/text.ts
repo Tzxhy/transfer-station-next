@@ -11,7 +11,7 @@ export const config = {
 }
 
 const ApiDefaultConfig = {
-    dataSource: 'Cluster0',
+
     database: 'transfer',
     collection: 'clipboards',
 }

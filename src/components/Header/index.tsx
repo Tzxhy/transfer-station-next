@@ -1,3 +1,4 @@
+/* eslint-disable */
 import {
     AppBar,
     Toolbar,
@@ -12,6 +13,11 @@ import {
     Divider,
     Box,
     Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogActions,
+    Alert,
 } from '@mui/material';
 import React, { memo, useEffect, useState } from 'react';
 import HomeIcon from '@mui/icons-material/Home';
@@ -20,6 +26,12 @@ import { cacheData, getCacheData } from '../../utils/network';
 import config from '../../config';
 import { getToken, setToken } from '../../utils/token';
 import useDialog from '../../hooks/useDialog';
+import useTip from '../../hooks/useTip';
+import PasswordInput from '../PasswordInput';
+import { changePassword } from '../../api';
+
+// @ts-ignore
+import hash from 'hash.js/lib/hash/sha/256';
 
 import Link from 'next/link'
 
@@ -42,7 +54,6 @@ export default memo(function Header(props: {
     useEffect(() => {
         setTitle(`${useOfflineMode ? '[离线]' : ''}传送站 - ${props.title}`)
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [useOfflineMode])
 
     const isLogin = !!getToken();
@@ -86,6 +97,50 @@ export default memo(function Header(props: {
         openDialog,
     } = useDialog()
 
+    const {
+        tip,
+        openTip,
+    } = useTip()
+
+    // 修改密码弹窗
+    const [pwdDialogOpen, setPwdDialogOpen] = useState(false);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [pwdError, setPwdError] = useState('');
+
+    const openPasswordDialog = () => {
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setPwdError('');
+        setPwdDialogOpen(true);
+    }
+
+    const submitChangePassword = async () => {
+        if (newPassword.length < 6) {
+            setPwdError('新密码长度至少 6 位');
+            return;
+        }
+        if (newPassword !== confirmPassword) {
+            setPwdError('两次输入的新密码不一致');
+            return;
+        }
+        const data = await changePassword(
+            hash().update(oldPassword).digest('hex'),
+            hash().update(newPassword).digest('hex'),
+        );
+        if (data.code === 0) {
+            setPwdDialogOpen(false);
+            setPwdError('');
+            openTip({
+                content: '密码修改成功',
+                color: 'success',
+            });
+        } else {
+            setPwdError(data.message || '修改失败，请稍后再试');
+        }
+    }
 
     return <AppBar position="fixed" sx={{
         zIndex: 3,
@@ -168,6 +223,11 @@ export default memo(function Header(props: {
                         <ListItem>
                             <Button
                                 fullWidth
+                                variant='outlined' color='primary' onClick={openPasswordDialog}>修改密码</Button>
+                        </ListItem>
+                        <ListItem>
+                            <Button
+                                fullWidth
                                 variant='outlined' color='warning' onClick={() => {
                                     const closeDialog = openDialog({
                                         title: '登出',
@@ -187,6 +247,31 @@ export default memo(function Header(props: {
         </SwipeableDrawer>
         {
             dialog
+        }
+        <Dialog open={pwdDialogOpen} onClose={() => setPwdDialogOpen(false)} maxWidth="xs" fullWidth>
+            <DialogTitle>修改密码</DialogTitle>
+            <DialogContent>
+                <Box sx={{
+                    pt: 1,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 2,
+                }}>
+                    <PasswordInput label="当前密码" value={oldPassword} handleChange={e => setOldPassword(e.target.value)} />
+                    <PasswordInput label="新密码" value={newPassword} handleChange={e => setNewPassword(e.target.value)} />
+                    <PasswordInput label="确认新密码" value={confirmPassword} handleChange={e => setConfirmPassword(e.target.value)} />
+                    {
+                        pwdError ? <Alert severity="error">{pwdError}</Alert> : null
+                    }
+                </Box>
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={() => setPwdDialogOpen(false)}>取消</Button>
+                <Button onClick={submitChangePassword}>确定</Button>
+            </DialogActions>
+        </Dialog>
+        {
+            tip
         }
     </AppBar>
 }, (prevProps, nextProps) => {

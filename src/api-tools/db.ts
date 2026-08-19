@@ -27,6 +27,7 @@ type ApiRequest = {
     documents?: any[];
     update?: any;
     upsert?: boolean;
+    field?: string;
 };
 
 // 递归把 Data API 的 $oid 写法转成驱动的 ObjectId
@@ -99,6 +100,13 @@ export const api = {
     deleteMany: async (req: ApiRequest) => {
         const r = await getCollection(req.database, req.collection).deleteMany(toObjectId(req.filter ?? {}));
         return { deletedCount: r.deletedCount };
+    },
+    createUniqueIndex: async (req: ApiRequest) => {
+        const name = await getCollection(req.database, req.collection).createIndex(
+            { [req.field!]: 1 },
+            { unique: true },
+        );
+        return { indexName: name };
     },
 };
 

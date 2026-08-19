@@ -42,5 +42,7 @@ export const config = {
         '/api/bookmark',
         '/api/favicon',
         '/api/file',
+        '/api/change-password',
+        '/api/short-link',
     ],
 }
