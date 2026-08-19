@@ -27,6 +27,7 @@ import {
 } from '../../api';
 
 import CustomThemeProvider from '../../components/Theme';
+import useCheckLogin from '../../hooks/useCheckLogin';
 import useDialog from '../../hooks/useDialog';
 import useTip from '../../hooks/useTip';
 import Empty from '../../components/Empty';
@@ -102,6 +103,7 @@ const uploadFileToServer = (file: File, onProgress: (percentage: number) => void
 });
 
 export default function FileListPage() {
+	useCheckLogin();
 
 	const [list, updateList] = useState<FileItem[]>([]);
 	const [uid, setUid] = useState('');

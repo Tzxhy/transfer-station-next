@@ -26,6 +26,7 @@ import {
 import type { ShortLinkItem } from '../../api';
 
 import CustomThemeProvider from '../../components/Theme';
+import useCheckLogin from '../../hooks/useCheckLogin';
 import useDialog from '../../hooks/useDialog';
 import useTip from '../../hooks/useTip';
 import Empty from '../../components/Empty';
@@ -53,6 +54,8 @@ const copyText = async (text: string) => {
 };
 
 export default function ShortLinkPage() {
+    useCheckLogin();
+
     const [note, setNote] = useState('');
     const [url, setUrl] = useState('');
     const [customPath, setCustomPath] = useState('');

@@ -234,7 +234,7 @@ export default memo(function Header(props: {
                                         desc: '确认登出？确认后将回到登录页面',
                                         async onClickOk() {
                                             setToken('');
-                                            location.href = '/html/login/';
+                                            location.href = '/login/';
                                             closeDialog();
                                         },
                                     });

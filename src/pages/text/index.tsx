@@ -27,6 +27,7 @@ import {
 } from '../../api';
 
 import CustomThemeProvider from '../../components/Theme';
+import useCheckLogin from '../../hooks/useCheckLogin';
 import useDialog from '../../hooks/useDialog';
 import Edit from '../../components/Text/add';
 import useTip from '../../hooks/useTip';
@@ -50,6 +51,7 @@ const actions = [
 ];
 
 export default function ClipBoardList() {
+	useCheckLogin();
 
 	const [isLoading, setIsLoading] = useState(true)
 	const {

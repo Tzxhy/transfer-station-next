@@ -13,8 +13,10 @@ import Link from 'next/link';
 import Header from '../components/Header';
 import CustomThemeProvider from '../components/Theme';
 import HomeIcon from '@mui/icons-material/Home';
+import useCheckLogin from '../hooks/useCheckLogin';
 
 function App() {
+    useCheckLogin();
 
     return (
         <CustomThemeProvider>

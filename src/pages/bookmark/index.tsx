@@ -28,6 +28,7 @@ import {
     modifyBookMarks,
 } from '../../api';
 import CustomThemeProvider from '../../components/Theme';
+import useCheckLogin from '../../hooks/useCheckLogin';
 import { useMenu } from '../../hooks/useMenu';
 import useDialog from '../../hooks/useDialog';
 import EditBookMarkDialogBody from '../../components/Bookmark/edit';
@@ -52,6 +53,7 @@ type BookMarkListItem = {
 let menuClose!: () => void;
 
 export default function BookMarkList() {
+    useCheckLogin();
 
     const currentBookMarkRef = useRef<BookMarkWithGet | null>(null);
     const [list, updateList, listRef] = useStateRef<BookMarkListItem[]>([]);
