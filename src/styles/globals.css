@@ -20,6 +20,7 @@ body {
 #__next {
   height: 100%;
   overflow: auto;
+  position: relative;
 }
 html, body, #root {
 	width: 100%;
