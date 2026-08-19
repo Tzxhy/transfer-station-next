@@ -345,12 +345,12 @@ export default function ClipBoardList() {
 					{
 						actions.map((action, idx) => (
 							<SpeedDialAction
-								key={action.name}
+								key={idx}
 								icon={action.icon}
-								title={action.name}
 								slotProps={{
 									tooltip: {
 										open: true,
+                                        title: action.name,
 									},
 								}}
 								data-idx={idx}
