@@ -21,6 +21,7 @@
     "@vercel/blob": "^2.8.0",
     "@vercel/functions": "^3.9.3",
     "@vercel/global-config": "^1.5.1",
+    "@vercel/speed-insights": "^2.0.0",
     "axios": "^1.19.0",
     "bookmarks-to-json": "^1.0.5",
     "cheerio": "^1.2.0",

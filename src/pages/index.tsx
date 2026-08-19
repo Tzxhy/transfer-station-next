@@ -7,6 +7,7 @@ import {
     ListItemText,
     Toolbar,
 } from '@mui/material'
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 import Link from 'next/link';
 
@@ -21,6 +22,7 @@ function App() {
     return (
         <CustomThemeProvider>
             <CssBaseline />
+            <SpeedInsights />
             <Box sx={{
                 flexGrow: 1,
             }}>
